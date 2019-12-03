@@ -1,0 +1,3 @@
+bind_addr = ":8080"
+log_level = "debug"
+database_url = "user=almus password=pwd1234567 host=localhost dbname=mydb sslmode=disable port=54320"
