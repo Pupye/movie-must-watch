@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq" //driveres
+	_ "github.com/lib/pq" //drivers
 )
 
 //Store ...
