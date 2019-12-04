@@ -2,4 +2,4 @@ bind_addr = ":8081"
 log_level = "debug"
 # connection string for database connection
 [database_configs]
-database_url = "user=almus password=pwd1234567 host=localhost dbname=mydb sslmode=disable port=54320"
+database_url = "user=almus password=pwd1234567 host=localhost dbname=mydb port=54320 sslmode=disable"
