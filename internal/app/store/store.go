@@ -9,6 +9,7 @@ import (
 type Store struct {
 	config *Config
 	db     *sql.DB
+	movieRepository *MovieRepository
 }
 
 //New ...
@@ -37,4 +38,15 @@ func (s *Store) Open() error {
 //Close ...
 func (s *Store) Close() {
 	s.db.Close()
+}
+
+func (s *Store) Movie() *MovieRepository{
+	if s.movieRepository != nil {
+		return s.movieRepository
+	}
+	s.movieRepository = &MovieRepository{
+		store: s,
+	}
+
+	return s.movieRepository
 }

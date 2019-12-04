@@ -1,10 +1,14 @@
 package apiserver
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/Pupye/movie-must-watch/internal/app/store"
+	"github.com/Pupye/movie-must-watch/model"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"io"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -31,7 +35,7 @@ func (s *APIServer) Start() error {
 		return err
 	}
 
-	s.confiqureRouter()
+	s.configureRouter()
 
 	if err := s.configureStore(); err != nil {
 		return err
@@ -52,8 +56,9 @@ func (s *APIServer) configureLogger() error {
 	return nil
 }
 
-func (s *APIServer) confiqureRouter() {
+func (s *APIServer) configureRouter() {
 	s.router.HandleFunc("/hello", s.handleHello())
+	s.router.HandleFunc("/new-movie", s.handleCreateMovie()).Methods("POST")
 }
 
 func (s *APIServer) configureStore() error {
@@ -74,3 +79,30 @@ func (s *APIServer) handleHello() http.HandlerFunc {
 		io.WriteString(w, "fuck yea")
 	}
 }
+
+func (s *APIServer) handleCreateMovie() http.HandlerFunc {
+
+	return func(writer http.ResponseWriter, request *http.Request) {
+		newMovie := &model.Movie{}
+
+		reqBody, err := ioutil.ReadAll(request.Body)
+		if err != nil {
+			fmt.Println("you should enter proper json")
+			writer.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		json.Unmarshal(reqBody, newMovie)
+		fmt.Println(newMovie)
+		_, err = s.store.Movie().Create(newMovie)
+
+		if err != nil {
+			fmt.Println(err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		writer.WriteHeader(http.StatusCreated)
+		json.NewEncoder(writer).Encode(newMovie)
+	}
+}
+
