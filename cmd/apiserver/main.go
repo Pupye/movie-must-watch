@@ -2,10 +2,9 @@ package main
 
 import (
 	"flag"
-	"log"
-
 	"github.com/BurntSushi/toml"
-	"github.com/Pupye/rest-api/internal/app/apiserver" //hello
+	"github.com/Pupye/movie-must-watch/internal/app/apiserver"
+	"log"
 )
 
 var (

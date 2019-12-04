@@ -1,4 +1,4 @@
-module github.com/Pupye/rest-api
+module github.com/Pupye/movie-must-watch
 
 go 1.13
 

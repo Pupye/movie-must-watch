@@ -1,6 +1,6 @@
 package apiserver
 
-import "../store"
+import "github.com/Pupye/movie-must-watch/internal/app/store"
 
 //Config ...
 type Config struct {

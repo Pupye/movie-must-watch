@@ -1,12 +1,11 @@
 package apiserver
 
 import (
-	"io"
-	"net/http"
-
-	"../store"
+	"github.com/Pupye/movie-must-watch/internal/app/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
+	"io"
+	"net/http"
 )
 
 //APIServer ...
