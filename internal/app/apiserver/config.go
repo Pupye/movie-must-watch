@@ -1,6 +1,6 @@
 package apiserver
 
-import "github.com/Pupye/rest-api/internal/app/store"
+import "../store"
 
 //Config ...
 type Config struct {
