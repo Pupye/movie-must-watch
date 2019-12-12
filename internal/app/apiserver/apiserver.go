@@ -1,18 +1,14 @@
 package apiserver
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/Pupye/movie-must-watch/internal/app/store"
-	"github.com/Pupye/movie-must-watch/model"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
-//APIServer ...
+//APIServer structure that contains everything app requires
 type APIServer struct {
 	config *Config
 	logger *logrus.Logger
@@ -20,7 +16,7 @@ type APIServer struct {
 	store  *store.Store
 }
 
-//New ...
+//New method to initialize the ourserver
 func New(config *Config) *APIServer {
 	return &APIServer{
 		config: config,
@@ -29,7 +25,7 @@ func New(config *Config) *APIServer {
 	}
 }
 
-//Start ...
+//Start how we start this server basically by confiquring everything
 func (s *APIServer) Start() error {
 	if err := s.configureLogger(); err != nil {
 		return err
@@ -58,7 +54,6 @@ func (s *APIServer) configureLogger() error {
 
 func (s *APIServer) configureRouter() {
 	s.router.HandleFunc("/hello", s.handleHello())
-	s.router.HandleFunc("/new-movie", s.handleCreateMovie()).Methods("POST")
 }
 
 func (s *APIServer) configureStore() error {
@@ -76,33 +71,6 @@ func (s *APIServer) configureStore() error {
 func (s *APIServer) handleHello() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "fuck yea")
+		io.WriteString(w, "Hello world")
 	}
 }
-
-func (s *APIServer) handleCreateMovie() http.HandlerFunc {
-
-	return func(writer http.ResponseWriter, request *http.Request) {
-		newMovie := &model.Movie{}
-
-		reqBody, err := ioutil.ReadAll(request.Body)
-		if err != nil {
-			fmt.Println("you should enter proper json")
-			writer.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		json.Unmarshal(reqBody, newMovie)
-		fmt.Println(newMovie)
-		_, err = s.store.Movie().Create(newMovie)
-
-		if err != nil {
-			fmt.Println(err)
-			writer.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		writer.WriteHeader(http.StatusCreated)
-		json.NewEncoder(writer).Encode(newMovie)
-	}
-}
-
