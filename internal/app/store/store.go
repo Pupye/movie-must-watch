@@ -7,8 +7,9 @@ import (
 
 //Store ...
 type Store struct {
-	config *Config
-	db     *sql.DB
+	config         *Config
+	db             *sql.DB
+	userRepository *UserRepository
 }
 
 //New ...
@@ -37,4 +38,18 @@ func (s *Store) Open() error {
 //Close ...
 func (s *Store) Close() {
 	s.db.Close()
+}
+
+//User method which returns user repository to work with users table
+func (s *Store) User() *UserRepository {
+	//with the help of this method now we can deal with users by s.User().Create(<model>)
+	if s.userRepository != nil {
+		return s.userRepository
+	}
+
+	s.userRepository = &UserRepository{
+		store: s,
+	}
+
+	return s.userRepository
 }
