@@ -20,3 +20,19 @@ func TestUserRepository_Create(t *testing.T) {
 	assert.NotNil(t, u)
 	assert.NotEqual(t, "", u.EncryptedPassword, "password should not be empty")
 }
+
+func TestUserRepository_FindByEmail(t *testing.T) {
+	s, teardown := store.TestStore(t, databaseURL)
+	defer teardown("users")
+
+	s.User().Create(&model.User{
+		Email:             "findthis@gmail.com",
+		EncryptedPassword: "asdasd",
+	})
+
+	u, err := s.User().FindByEmail("findthis@gmail.com")
+
+	assert.NoError(t, err, "unexpected error")
+	assert.NotNil(t, u)
+	assert.Equal(t, "findthis@gmail.com", u.Email)
+}
