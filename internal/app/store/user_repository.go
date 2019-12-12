@@ -9,7 +9,12 @@ type UserRepository struct {
 
 //Create creates model in database and returns it
 func (r *UserRepository) Create(u *model.User) (*model.User, error) {
-	err := r.store.db.QueryRow(
+	err := u.BeforeCreating()
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.store.db.QueryRow(
 		"INSERT INTO Users (email, encrypted_password) VALUES ($1, $2) RETURNING id",
 		u.Email, u.EncryptedPassword,
 	).Scan(&u.ID) // maps returing id into parameter
