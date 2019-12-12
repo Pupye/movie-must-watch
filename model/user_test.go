@@ -7,6 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestUser_Validate(t *testing.T) {
+	u := model.TestUser(t)
+	assert.NoError(t, u.Validate())
+}
+
 func TestUser_BeforeCreate(t *testing.T) {
 	u := model.TestUser(t)
 	assert.NoError(t, u.BeforeCreating())
